@@ -1,0 +1,75 @@
+# 数据集配置
+dataset:
+  # shenzhen
+  # dataset_name: Shenzhen
+  # data_path: ./data/trajs_data/Shenzhen/week_trajs.npy
+  # map_path: ./data/mapping_data/Shenzhen/grid_mappings.npy
+  #beijing
+  dataset_name: Beijing
+  data_path: ./data/trajs_data/Beijing/week_trajs.npy
+  map_path: ./data/mapping_data/Beijing/grid_mappings.npy
+  batch_size: 128
+  num_workers: 4
+  shuffle: true
+  pin_memory: true
+  if_vqvae: false
+
+# VQVAE配置
+vqvae:
+  embedding_dim: 256
+  vocab_size: 4096
+  seq_len: 168
+  out_loc_num: 900
+  spatial_loc_nums: [900, 900, 225, 225,64,64,16, 16]
+  temporal_scale_nums: [168,112,84,56,28,14,7,1]
+
+  # spatial_loc_nums: [2236, 2236, 583, 583,171,171,54,54]
+  # temporal_scale_nums: [168,112,84,56,28,14,7,1]
+  # out_loc_num: 2236
+
+
+  using_znorm: true
+  beta: 0.25
+
+#shenzhen
+# vqvae_checkpoint: ./results/shenzhen_vqvae/checkpoints/best_model.pt
+# beijing
+vqvae_checkpoint: ./results/beijing_vqvae/checkpoints/best_model.pt
+
+# 生成器配置
+generator:
+  hidden_size: 256
+  n_heads: 8
+  n_layers: 4
+  mlp_ratio: 4.0
+  drop_rate: 0.2
+  attn_drop_rate: 0.2
+  drop_path_rate: 0.2
+  cond_drop_rate: 0.2
+  num_scales: 4
+  max_seq_len: 168
+  temperature: 1
+  top_k: 30
+
+# 训练配置
+training:
+  epochs: 100
+  learning_rate: 1.0e-3
+  min_lr: 1.0e-4
+  weight_decay: 0.01
+  gradient_clip_val: 1.0
+  early_stopping_patience: 20
+
+# 日志配置
+logging:
+  log_interval: 100
+  eval_interval: 5
+
+# 保存配置
+saving:
+  save_dir: results
+  model_dir: checkpoints
+  log_file: training.log
+  save_interval: 1
+  save_best: true
+  metric_for_best: loss 

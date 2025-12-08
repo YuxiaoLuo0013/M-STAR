@@ -1,0 +1,72 @@
+# Dataset configurations
+dataset:
+  data_path: ./data/trajs_data/Beijing/week_trajs.npy
+  map_path: ./data/mapping_data/Beijing/grid_mappings.npy
+  # data_path: ./data/trajs_data/Shenzhen/week_trajs.npy
+  # map_path: ./data/mapping_data/Shenzhen/grid_mappings.npy
+  batch_size: 128
+  num_workers: 4
+  shuffle: true
+  pin_memory: true
+  if_vqvae: true
+
+# Model configurations
+model:
+  # Architecture
+  embedding_dim: 256
+  vocab_size: 4096
+  hidden_dims: [64, 128, 256]
+  seq_len: 168
+  out_loc_num: 900
+  # spatial_loc_nums: [900,225,64,16]
+  # temporal_scale_nums: [56 ,24,7, 1]
+  spatial_loc_nums: [900, 900, 225, 225,64,64,16,16]
+  temporal_scale_nums: [168,112,84,56,28,14,7,1]
+
+  # spatial_loc_nums: [2236, 2236, 583, 583,171,171,54,54]
+  # temporal_scale_nums: [168,112,84,56,28,14,7,1]
+
+  # spatial_loc_nums: [2236,583,171,54]
+  # temporal_scale_nums: [168,42,7,1]
+  
+  # VQ parameters
+  beta: 0.25
+  commitment_cost: 0.25
+  decay: 0.99
+  using_znorm: true
+
+# Training configurations
+training:
+  epochs: 100
+  learning_rate: 1.0e-4
+  codebook_learning_rate: 1.0e-4
+  min_lr: 1.0e-6
+  device: cuda:0
+  gradient_clip_val: 1.0
+  early_stopping_patience: 5
+  checkpoint_dir: checkpoints/vqvae
+
+# Optimizer configurations
+optimizer:
+  type: Adam
+  beta1: 0.9
+  beta2: 0.999
+  weight_decay: 1.0e-5
+
+# Logging configurations
+logging:
+  exp_name: vqvae_exp
+  log_dir: runs
+  log_interval: 100
+  log_step: 100
+  use_tensorboard: true
+  metrics: [loss, recon_loss, vq_loss]
+
+# Saving configurations
+saving:
+  save_dir: results
+  model_dir: checkpoints
+  log_file: training.log
+  save_interval: 10
+  save_best: true
+  metric_for_best: loss
